@@ -1,5 +1,6 @@
 import { supabase } from "../lib/supabaseClient";
 import { user } from "../stores/authStores";
+import { monitorData } from "../stores/dbStores";
 
 interface RowData {
     discrepancy_category?: string;
@@ -36,4 +37,12 @@ export async function addDiscrepancy(rowData: RowData) {
         error
     }
 
+}
+
+export async function updateMonitorData() {
+    const { data: discrepancies } = await supabase
+        .from('discrepancies')
+        .select('*')
+
+    monitorData.set(discrepancies)
 }

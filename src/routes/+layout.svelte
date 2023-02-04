@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { invalidate } from '$app/navigation';
 	import { user } from '../stores/authStores';
+	import { initRealtimeHooks } from '../hooks/realtimeHooks';
 
 	interface navInfo {
 		href: string;
@@ -15,7 +16,9 @@
 		{ href: '/login', displayName: 'Log in' },
 		{ href: '/monitor', displayName: 'Monitor' }
 	];
-
+	
+	initRealtimeHooks();
+	
 	onMount(() => {
 		const {
 			data: { subscription }
@@ -28,6 +31,7 @@
 			} = await supabase.auth.getSession();
 
 			user.set(session ? session.user : undefined);
+
 
 			if (error) {
 				throw new Error('Issue updating user');
