@@ -38,3 +38,41 @@ export async function updateMonitorData() {
 
     monitorData.set(discrepancies ?? [])
 }
+
+export async function editDiscrepancy(id: number, fieldData: Discrepancy) {
+
+    const { error } = await supabase
+        .from('discrepancies')
+        .update(fieldData)
+        .eq('id', id)
+
+    if (error) {
+        throw new Error(`Issue editing: ${error.message}`)
+    }
+
+}
+
+export async function deleteDiscrepancy(id: number) {
+
+    const { error } = await supabase
+        .from('discrepancies')
+        .delete()
+        .eq('id', id)
+
+    if (error) {
+        throw new Error(`Issue deleting: ${error.message}`)
+    }
+
+}
+export async function deleteDiscrepancies(ids: Array<number>) {
+
+    const { error } = await supabase
+        .from('discrepancies')
+        .delete()
+        .in('id', ids)
+
+    if (error) {
+        throw new Error(`Issue deleting: ${error.message}`)
+    }
+
+}

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { monitorData } from '../../stores/dbStores';
-	import { map, of } from 'rxjs';
 	import type { Discrepancy } from '$lib/db_interfaces';
+	import DiscrepancyDetails from './components/DiscrepancyDetails.svelte';
+	import { deleteDiscrepancies } from '$lib/db';
 
 	function formatDate(date: string) {
 		const d = new Date(date);
@@ -10,7 +10,7 @@
 	}
 
 	let selected: Array<number> = [];
-	function handleSelection(event: { target: { value: any; checked: any } }) {
+	function handleSelection(event:any) {
 		const id = event.target.value;
 		const isSelected = event.target.checked;
 
@@ -22,13 +22,22 @@
 		selected = selected;
 	}
 
-	let discrepacyForDetail: Discrepancy;
+	async function deleteSelected() {
+		await deleteDiscrepancies(selected)
+		selected = []
+	}
 
-	export let data: PageData;
+	let discrepacyForDetail: any;
+
 </script>
 
 {#if selected.length > 0}
+<div class="p-3">
+
 	<p>{selected.length} row{selected.length > 1 ? 's' : ''} selected</p>
+	<button type="button" class="btn btn-danger pr-3" on:click={deleteSelected}>Delete</button>
+	<button type="button" class="btn btn-success">Build report with selected</button>
+</div>	
 {/if}
 
 <table class="table">
@@ -42,7 +51,7 @@
 	</thead>
 	<tbody class="table-group-divider">
 		{#if $monitorData}
-			{#each $monitorData as row}
+			{#each $monitorData as row (row.id)}
 				<tr>
 					<th scope="row">
 						<div class="form-check">
@@ -94,10 +103,12 @@
 				<h5 class="modal-title" id="discrepancyTitleId">Discrepancy data</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
-			<div class="modal-body">Body</div>
+			<div class="modal-body">
+				<DiscrepancyDetails {...discrepacyForDetail} />
+			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save</button>
+				<button type="button" class="btn btn-secondary">Edit data</button>
+				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
 			</div>
 		</div>
 	</div>
