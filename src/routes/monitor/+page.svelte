@@ -45,7 +45,7 @@
 		<tr>
 			<th scope="col">ID</th>
 			<th scope="col">Channel</th>
-			<th scope="col">Date</th>
+			<th scope="col">Confirmation date</th>
 			<th scope="col">Category</th>
 		</tr>
 	</thead>
