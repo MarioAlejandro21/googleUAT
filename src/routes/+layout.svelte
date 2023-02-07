@@ -12,9 +12,9 @@
 	}
 
 	const navsInfo: navInfo[] = [
-		{ href: '/add', displayName: 'Add discrepancy' },
+		{ href: '/monitor', displayName: 'Monitor' },
 		{ href: '/login', displayName: 'Log in' },
-		{ href: '/monitor', displayName: 'Monitor' }
+		{ href: '/add', displayName: 'Add discrepancy' },
 	];
 	
 	initRealtimeHooks();

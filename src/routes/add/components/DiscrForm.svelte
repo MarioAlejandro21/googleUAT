@@ -22,9 +22,9 @@
 	const entities = ['GOOGLE', 'FITBIT'];
 
 	let discrepancy_category: string;
-	let rma_creation_date: Date;
-	let dock_receipt_datetime: Date;
-	let discrepancy_confirmation_datetime: Date;
+	let rma_creation_date: string;
+	let dock_receipt_datetime: string;
+	let discrepancy_confirmation_datetime: string;
 	let tracking_number: string;
 	let rma_number: string;
 	let expected_sku: string;
