@@ -11,7 +11,7 @@
 		return d.toLocaleDateString();
 	}
 
-	let selected: Array<number> = [];
+	let selected: Array<string> = [];
 	function handleSelection(event: any) {
 		const id = event.target.value;
 		const isSelected = event.target.checked;
@@ -30,13 +30,56 @@
 	}
 
 	let discrepacyForDetail: Discrepancy | undefined;
+
+	let downloadLink: HTMLAnchorElement
+
+	let loadingReport = false
+
+	async function downloadReport() {
+		loadingReport = true
+		const rows: any = $monitorData?.filter(row => row.id && selected.includes(row.id.toString(10)))
+		const headers = [
+			'service_center',
+			'rma_creation_date',
+			'dock_receipt_datetime',
+			'discrepancy_confirmation_datetime',
+			'tracking_number',
+			'rma_number',
+			'discrepancy_category',
+			'expected_sku',
+			'expected_sn',
+			'received_sku',
+			'received_sn',
+			'qty',
+			'channel',
+			'entity',
+		]
+
+		let csv = [headers.toString()]
+
+		rows?.forEach((row: { [x: string]: any; }) => {
+			const values = headers.map(header => row[header] ?? "")
+			csv.push(values.toString())
+		})
+
+		const formated = csv.join('\n')
+
+		const blob = new Blob([formated], {type: 'text/csv'})
+
+		downloadLink.href = URL.createObjectURL(blob)
+
+		loadingReport = false
+
+		downloadLink.click()
+	}
+
 </script>
 
 {#if selected.length > 0}
 	<div class="p-3">
 		<p>{selected.length} row{selected.length > 1 ? 's' : ''} selected</p>
 		<button type="button" class="btn btn-danger pr-3" on:click={deleteSelected}>Delete</button>
-		<button type="button" class="btn btn-success">Build report with selected</button>
+		<button on:click={downloadReport} type="button" class="btn btn-success">{loadingReport ? "Creating report...": "Build report with selected"}</button>
 	</div>
 {/if}
 
@@ -127,3 +170,5 @@
 		</div>
 	</div>
 </div>
+
+<a bind:this={downloadLink} hidden href="/">Download</a>

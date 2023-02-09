@@ -64,7 +64,7 @@ export async function deleteDiscrepancy(id: number) {
     }
 
 }
-export async function deleteDiscrepancies(ids: Array<number>) {
+export async function deleteDiscrepancies(ids: Array<string>) {
 
     const { error } = await supabase
         .from('discrepancies')
