@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { monitorData } from '../../stores/dbStores';
-	import type { Discrepancy } from '$lib/db_interfaces';
 	import DiscrepancyDetails from './components/DiscrepancyDetails.svelte';
 	import { deleteDiscrepancies } from '$lib/db';
+	import type { Discrepancy } from '$lib/db_interfaces';
+
+	let editionOn = false;
 
 	function formatDate(date: string) {
 		const d = new Date(date);
@@ -10,7 +12,7 @@
 	}
 
 	let selected: Array<number> = [];
-	function handleSelection(event:any) {
+	function handleSelection(event: any) {
 		const id = event.target.value;
 		const isSelected = event.target.checked;
 
@@ -23,21 +25,19 @@
 	}
 
 	async function deleteSelected() {
-		await deleteDiscrepancies(selected)
-		selected = []
+		await deleteDiscrepancies(selected);
+		selected = [];
 	}
 
-	let discrepacyForDetail: any;
-
+	let discrepacyForDetail: Discrepancy | undefined;
 </script>
 
 {#if selected.length > 0}
-<div class="p-3">
-
-	<p>{selected.length} row{selected.length > 1 ? 's' : ''} selected</p>
-	<button type="button" class="btn btn-danger pr-3" on:click={deleteSelected}>Delete</button>
-	<button type="button" class="btn btn-success">Build report with selected</button>
-</div>	
+	<div class="p-3">
+		<p>{selected.length} row{selected.length > 1 ? 's' : ''} selected</p>
+		<button type="button" class="btn btn-danger pr-3" on:click={deleteSelected}>Delete</button>
+		<button type="button" class="btn btn-success">Build report with selected</button>
+	</div>
 {/if}
 
 <table class="table">
@@ -101,14 +101,28 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="discrepancyTitleId">Discrepancy data</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+				<button
+					type="button"
+					on:click={() => (editionOn = false)}
+					class="btn-close"
+					data-bs-dismiss="modal"
+					aria-label="Close"
+				/>
 			</div>
 			<div class="modal-body">
-				<DiscrepancyDetails {...discrepacyForDetail} />
+				<DiscrepancyDetails bind:editionOn discrepancy={discrepacyForDetail} />
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary">Edit data</button>
-				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+				<button on:click={() => (editionOn = !editionOn)} type="button" class="btn btn-secondary">
+					{editionOn ? 'Read mode' : 'Edition mode'}
+				</button>
+
+				<button
+					type="button"
+					on:click={() => (editionOn = false)}
+					class="btn btn-primary"
+					data-bs-dismiss="modal">Ok</button
+				>
 			</div>
 		</div>
 	</div>
