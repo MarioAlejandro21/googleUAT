@@ -7,6 +7,5 @@ export const load = (async () => {
     await updateMonitorData()
 
 
-
     return {};
 }) satisfies PageLoad;

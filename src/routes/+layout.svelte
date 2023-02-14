@@ -1,25 +1,25 @@
 <script lang="ts">
-	import type { LayoutData } from './$types';
 	import { supabase } from '$lib/supabaseClient';
 	import { onMount } from 'svelte';
 	import { invalidate } from '$app/navigation';
 	import { user } from '../stores/authStores';
 	import { initRealtimeHooks } from '../hooks/realtimeHooks';
-
+	import { checkWindow } from '$lib/utils';
 	interface navInfo {
 		href: string;
 		displayName: string;
 	}
 
+	initRealtimeHooks();
+
 	const navsInfo: navInfo[] = [
 		{ href: '/monitor', displayName: 'Monitor' },
 		{ href: '/login', displayName: 'Log in' },
-		{ href: '/add', displayName: 'Add discrepancy' },
+		{ href: '/add', displayName: 'Add discrepancy' }
 	];
-	
-	initRealtimeHooks();
-	
+
 	onMount(() => {
+		checkWindow();
 		const {
 			data: { subscription }
 		} = supabase.auth.onAuthStateChange(async () => {
@@ -30,8 +30,7 @@
 				error
 			} = await supabase.auth.getSession();
 
-			user.set(session ? session.user : undefined);
-
+			user.set(session ? session.user : null);
 
 			if (error) {
 				throw new Error('Issue updating user');
@@ -42,8 +41,6 @@
 			subscription.unsubscribe();
 		};
 	});
-
-	export let data: LayoutData;
 </script>
 
 <nav class="navbar navbar-expand-md">

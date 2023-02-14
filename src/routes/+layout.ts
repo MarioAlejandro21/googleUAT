@@ -8,7 +8,8 @@ export const load: LayoutLoad = async (event) => {
 
   const { session } = await getSupabase(event)
 
-  user.set(session ? session.user : undefined)
+  user.set(session ? session.user : null)
+
 
 
   return { session }

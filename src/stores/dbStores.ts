@@ -4,4 +4,5 @@ import { writable, type Writable } from "svelte/store";
 
 
 
-export const monitorData: Writable<Array<Discrepancy> | undefined>= writable()
+export const monitorData: Writable<Array<Discrepancy> | undefined> = writable()
+

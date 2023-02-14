@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Discrepancy } from '$lib/db_interfaces';
 	import { supabase } from '$lib/supabaseClient';
-	import { onMount } from 'svelte';
 
 	const discrepancyCategories = [
 		'DUMMY_FAKE',
@@ -42,7 +41,8 @@
 			'tracking_number',
 			'expected_sku',
 			'received_sku',
-			'received_sn'
+			'received_sn',
+			'qty'
 		];
 
 		let submitDiscrepancy: any = {};
@@ -73,6 +73,7 @@
 	}
 
 	export let editionOn = false;
+
 </script>
 
 {#if discrepancy}
@@ -189,6 +190,7 @@
 						{#if editionOn}
 							<input
 								type="text"
+								autocomplete="off"
 								class="form-control"
 								name="rma_number"
 								value={discrepancy.rma_number}
@@ -217,6 +219,7 @@
 						{#if editionOn}
 							<input
 								type="text"
+								autocomplete="off"
 								class="form-control"
 								name="tracking_number"
 								value={discrepancy.tracking_number}
@@ -231,6 +234,7 @@
 						{#if editionOn}
 							<input
 								type="text"
+								autocomplete="off"
 								class="form-control"
 								name="expected_sku"
 								value={discrepancy.expected_sku}
@@ -245,6 +249,7 @@
 						{#if editionOn}
 							<input
 								type="text"
+								autocomplete="off"
 								class="form-control"
 								name="received_sku"
 								value={discrepancy.received_sku}
@@ -254,17 +259,32 @@
 						{/if}
 					</tr>
 
-					<tr class="">
+					<tr>
 						<td>Received SN</td>
 						{#if editionOn}
 							<input
 								type="text"
+								autocomplete="off"
 								class="form-control"
 								name="received_sn"
 								value={discrepancy.received_sn}
 							/>
 						{:else}
 							<td>{discrepancy.received_sn}</td>
+						{/if}
+					</tr>
+					<tr>
+						<td>Quantity</td>
+						{#if editionOn}
+							<input
+								type="number"
+								autocomplete="off"
+								class="form-control"
+								name="qty"
+								value={discrepancy.qty}
+							/>
+						{:else}
+							<td>{discrepancy.qty}</td>
 						{/if}
 					</tr>
 				</tbody>
