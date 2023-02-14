@@ -3,7 +3,7 @@
 	import DiscrepancyDetails from './components/DiscrepancyDetails.svelte';
 	import { deleteDiscrepancies } from '$lib/db';
 	import type { Discrepancy } from '$lib/db_interfaces';
-	import { formatDateFields } from '$lib/utils';
+	import { addTatColumn, formatDateFields } from '$lib/utils';
 	import { isLgScreen } from '../../stores/mediaStores';
 	let editionOn = false;
 
@@ -37,17 +37,22 @@
 
 	async function downloadReport() {
 		const downloadFileName = 'DISCREPANCY_REPORT_RECONEXT_RNMX_';
-
+		
 		loadingReport = true;
 		let rows: any = $monitorData?.filter((row) => row.id && selected.includes(row.id.toString(10)));
 
 		formatDateFields(rows);
+
+		if (rows) {
+			addTatColumn(rows)
+		}
 
 		const headers = [
 			'service_center',
 			'rma_creation_date',
 			'dock_receipt_datetime',
 			'discrepancy_confirmation_datetime',
+			'confirmation_tat',
 			'tracking_number',
 			'rma_number',
 			'discrepancy_category',

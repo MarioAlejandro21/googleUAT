@@ -58,3 +58,36 @@ export function checkWindow() {
     isLgScreen.set(result)
 }
 
+function getWorkingDays(startDate: Date, endDate: Date) {
+    let result = 0;
+
+    const currentDate = startDate;
+    while (currentDate <= endDate) {
+
+        const weekDay = currentDate.getDay();
+        if (weekDay != 0 && weekDay != 6)
+            result++;
+
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return result - 1;
+}
+
+export function addTatColumn(discrepancies: Discrepancy[]) {
+    discrepancies.forEach(row => {
+        const { discrepancy_confirmation_datetime, dock_receipt_datetime } = row
+
+        if (discrepancy_confirmation_datetime && dock_receipt_datetime) {
+            const startDate = new Date(dock_receipt_datetime)
+            const endDate = new Date(discrepancy_confirmation_datetime)
+
+            row.confirmation_tat = getWorkingDays(startDate, endDate)
+
+        }
+
+    });
+}
+
+
+

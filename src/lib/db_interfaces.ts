@@ -15,5 +15,6 @@ export interface Discrepancy {
     received_sn?: string,
     qty?: number,
     authorized_by?: string
-    assigned_disposition?: string
+    assigned_disposition?: string,
+    confirmation_tat?: number,
 }
