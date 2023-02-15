@@ -17,5 +17,6 @@ export interface Discrepancy {
     authorized_by?: string
     assigned_disposition?: string,
     confirmation_tat?: number,
-    reported_date?: string
+    reported_date?: string,
+    storage_location?: number
 }

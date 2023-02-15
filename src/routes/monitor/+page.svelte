@@ -43,9 +43,15 @@
 
 		formatDateFields(rows);
 
+		// add only report columns
+		
 		if (rows) {
 			addTatColumn(rows)
+			rows.forEach((row: Discrepancy) => {
+				row.storage_location = row.id
+			})
 		}
+
 
 		const headers = [
 			'service_center',
@@ -60,6 +66,7 @@
 			'expected_sn',
 			'received_sku',
 			'received_sn',
+			'storage_location',
 			'qty',
 			'channel',
 			'entity'
