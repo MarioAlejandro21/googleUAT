@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { monitorData } from '../../stores/dbStores';
 	import DiscrepancyDetails from './components/DiscrepancyDetails.svelte';
-	import { deleteDiscrepancies } from '$lib/db';
+	import { deleteDiscrepancies, markDiscrepanciesAsReported } from '$lib/db';
 	import type { Discrepancy } from '$lib/db_interfaces';
 	import { addTatColumn, formatDateFields } from '$lib/utils';
 	import { isLgScreen } from '../../stores/mediaStores';
 	let editionOn = false;
 
-	let selected: Array<string> = [];
+	let selected: Array<number> = [];
 	function handleSelection(event: any) {
-		const id = event.target.value;
+		const id = Number.parseInt(event.target.value, 10) ;
 		const isSelected = event.target.checked;
 
 		if (isSelected) {
@@ -39,7 +39,7 @@
 		const downloadFileName = 'DISCREPANCY_REPORT_RECONEXT_RNMX_';
 		
 		loadingReport = true;
-		let rows: any = $monitorData?.filter((row) => row.id && selected.includes(row.id.toString(10)));
+		let rows: any = $monitorData?.filter((row) => row.id && selected.includes(row.id));
 
 		formatDateFields(rows);
 
@@ -82,21 +82,15 @@
 		downloadLink.click();
 
 		checkboxForm.reset();
+
+		await markDiscrepanciesAsReported(selected)
+
 		selected = [];
 	}
 
 	let checkboxForm: HTMLFormElement;
 </script>
 
-{#if selected.length > 0}
-	<div class="container text-center">
-		<p>{selected.length} row{selected.length > 1 ? 's' : ''} selected</p>
-		<button type="button" class="btn btn-danger pr-3" on:click={deleteSelected}>Delete</button>
-		<button on:click={downloadReport} type="button" class="btn btn-success"
-			>{loadingReport ? 'Creating report...' : 'Build report with selected'}</button
-		>
-	</div>
-{/if}
 
 <form bind:this={checkboxForm}>
 	<table class="table">
@@ -165,6 +159,17 @@
 		</tbody>
 	</table>
 </form>
+
+{#if selected.length > 0}
+	<div class="container text-center">
+		<p>{selected.length} row{selected.length > 1 ? 's' : ''} selected</p>
+		<button type="button" class="btn btn-danger pr-3" on:click={deleteSelected}>Delete</button>
+		<button on:click={downloadReport} type="button" class="btn btn-success"
+			>{loadingReport ? 'Creating report...' : 'Build report with selected'}</button
+		>
+	</div>
+{/if}
+
 
 <!-- Modal Body -->
 <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->

@@ -3,17 +3,16 @@
 	import { onMount } from 'svelte';
 	import { invalidate } from '$app/navigation';
 	import { user } from '../stores/authStores';
-	import { initRealtimeHooks } from '../hooks/realtimeHooks';
 	import { checkWindow } from '$lib/utils';
 	interface navInfo {
 		href: string;
 		displayName: string;
 	}
 
-	initRealtimeHooks();
 
 	const navsInfo: navInfo[] = [
 		{ href: '/monitor', displayName: 'Monitor' },
+		{ href: '/archive', displayName: 'Archive' },
 		{ href: '/login', displayName: 'Log in' },
 		{ href: '/add', displayName: 'Add discrepancy' }
 	];

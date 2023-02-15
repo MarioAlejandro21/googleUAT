@@ -1,9 +1,55 @@
 import { supabase } from "../lib/supabaseClient";
 import { user } from "../stores/authStores";
-import { monitorData } from "../stores/dbStores";
 import type { Discrepancy } from "./db_interfaces";
 
 
+
+export async function getMonitorRecords(): Promise<Discrepancy[] | null> {
+    const { data, error } = await supabase.from('discrepancies')
+        .select('*')
+        .is('reported_date', null)
+
+    if (error) {
+        throw new Error(`Issue getting monitor data ${error.message}`)
+    }
+
+    return data
+}
+export async function getArchiveRecords(): Promise<Discrepancy[] | null> {
+    const { data, error } = await supabase.from('discrepancies')
+        .select('*')
+        .not('reported_date','is', null)
+
+    if (error) {
+        throw new Error(`Issue getting monitor data ${error.message}`)
+    }
+
+    return data
+}
+
+export async function markDiscrepanciesAsReported(ids: number[]) {
+    const date = Date.now()
+
+    console.log(ids)
+
+    const { error } = await supabase.from('discrepancies')
+    .update({reported_date: date})
+    .in('id', ids)
+
+    if (error) {
+        throw new Error(`Issue recording report date ${error.message}`)
+    }
+}
+export async function unmarkDiscrepanciesAsReported(ids: number[]) {
+
+    const { error } = await supabase.from('discrepancies')
+    .update({reported_date: null})
+    .in('id', ids)
+
+    if (error) {
+        throw new Error(`Issue deleting report date ${error.message}`)
+    }
+}
 
 
 
@@ -31,13 +77,7 @@ export async function addDiscrepancy(rowData: Discrepancy) {
 
 }
 
-export async function updateMonitorData() {
-    const { data: discrepancies } = await supabase
-        .from('discrepancies')
-        .select('*')
 
-    monitorData.set(discrepancies ?? [])
-}
 
 export async function editDiscrepancy(id: number, fieldData: Discrepancy) {
 
@@ -64,7 +104,7 @@ export async function deleteDiscrepancy(id: number) {
     }
 
 }
-export async function deleteDiscrepancies(ids: Array<string>) {
+export async function deleteDiscrepancies(ids: Array<number>) {
 
     const { error } = await supabase
         .from('discrepancies')

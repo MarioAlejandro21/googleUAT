@@ -1,11 +1,9 @@
-import { updateMonitorData } from '../../stores/dbStores';
+import { updateArchiveData } from '../../stores/dbStores';
 import type { PageLoad } from './$types';
 
 export const load = (async () => {
-
-
-    await updateMonitorData()
-
+    
+    await updateArchiveData()
 
     return {};
 }) satisfies PageLoad;
