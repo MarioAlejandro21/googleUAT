@@ -62,6 +62,11 @@ function getWorkingDays(startDate: Date, endDate: Date) {
     let result = 0;
 
     const currentDate = startDate;
+
+    if (startDate > endDate) {
+        return 0;
+    }
+
     while (currentDate <= endDate) {
 
         const weekDay = currentDate.getDay();
