@@ -11,10 +11,10 @@
 
 
 	const navsInfo: navInfo[] = [
+		{ href: '/add', displayName: 'Add discrepancy' },
 		{ href: '/monitor', displayName: 'Monitor' },
 		{ href: '/archive', displayName: 'Archive' },
 		{ href: '/login', displayName: 'Log in' },
-		{ href: '/add', displayName: 'Add discrepancy' }
 	];
 
 	onMount(() => {
