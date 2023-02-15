@@ -53,7 +53,7 @@
 							<td>{row.entity}</td>
 							<td>{row.channel}</td>
 							<td>{row.discrepancy_category}</td>
-							<td>{row.reported_date ? new Date(row.reported_date).toString() : null}</td>
+							<td>{row.reported_date ? new Date(row.reported_date).toLocaleDateString() : null}</td>
 						</tr>
 					{/each}
 				{/if}

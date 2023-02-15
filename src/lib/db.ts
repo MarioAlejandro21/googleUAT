@@ -28,7 +28,7 @@ export async function getArchiveRecords(): Promise<Discrepancy[] | null> {
 }
 
 export async function markDiscrepanciesAsReported(ids: number[]) {
-    const date = Date.now()
+    const date = new Date(Date.now())
 
     console.log(ids)
 
@@ -40,6 +40,8 @@ export async function markDiscrepanciesAsReported(ids: number[]) {
         throw new Error(`Issue recording report date ${error.message}`)
     }
 }
+
+
 export async function unmarkDiscrepanciesAsReported(ids: number[]) {
 
     const { error } = await supabase.from('discrepancies')
