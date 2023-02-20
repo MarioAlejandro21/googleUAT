@@ -98,6 +98,9 @@
 	let checkboxForm: HTMLFormElement;
 </script>
 
+<h1>Discrepancies pending to report</h1>
+<p>Here you will see any discrepancies pending to generate a csv report.</p>
+<p>To build the report check the record and click the green button.</p>
 
 <form bind:this={checkboxForm}>
 	<table class="table">

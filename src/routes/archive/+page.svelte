@@ -24,6 +24,9 @@
 	
 </script>
 
+<h1>Discrepancies reported</h1>
+<p>You can move the records to the monitor page for building the report again.</p>
+
 <form bind:this={form}>
 	<div class="table-responsive">
 		<table class="table ">

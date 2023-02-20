@@ -70,4 +70,25 @@
 
 <div class="container-sm">
 	<slot />
+	<footer>
+		<p>Created by Mario Alejandro Valenzuela <i class="bi bi-c-circle"></i></p>
+		<p>Contact info</p>
+		<ul>
+			<li>
+				<i class="bi bi-envelope-at" />
+				<a href="mailto:mariolejandro@live.com">mariolejandro@live.com</a>
+			</li>
+			<li><i class="bi bi-phone" /> 🇲🇽 <a href="tel:+526861470915">+52 686 147 0915 </a></li>
+		</ul>
+	</footer>
 </div>
+
+
+<style>
+	footer {
+		position:absolute;
+		bottom: 0px;
+		padding-bottom: 2rem;
+	}
+</style>
+
