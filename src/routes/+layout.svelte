@@ -70,6 +70,8 @@
 
 <div class="container-sm">
 	<slot />
+	<br>
+	<hr>
 	<footer>
 		<p>Created by Mario Alejandro Valenzuela <i class="bi bi-c-circle"></i></p>
 		<p>Contact info</p>
@@ -84,11 +86,4 @@
 </div>
 
 
-<style>
-	footer {
-		position:absolute;
-		bottom: 0px;
-		padding-bottom: 2rem;
-	}
-</style>
 
