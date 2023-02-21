@@ -100,7 +100,7 @@
 
 <h1>Discrepancies pending to report</h1>
 <p>Here you will see any discrepancies pending to generate a csv report.</p>
-<p>To build the report check the record and click the green button.</p>
+<p>To build the report check the records and click the green button. Remember to upload only <strong> 1 csv report per day</strong>.</p>
 
 <form bind:this={checkboxForm}>
 	<table class="table">

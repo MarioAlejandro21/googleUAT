@@ -22,7 +22,7 @@
 		>Vercel</a
 	>
 	and it uses a private database service in <a href="http://supabase.com">Supabase</a>, but the goal
-	is to use it wit a company account from Reconext
+	is to use it with a company account from Reconext.
 </p>
 
 <h5>Features:</h5>
