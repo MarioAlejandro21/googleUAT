@@ -56,20 +56,17 @@
 
 		loading = true;
 
-		const {newRecord: record, error} = await addDiscrepancy(rowData);
+		const { newRecord: record, error } = await addDiscrepancy(rowData);
 
 		loading = false;
 
 		if (!error) {
-			alert(`Success! 🎉 Discrepancy id: ${record.id}`)
+			alert(`Success! 🎉 Discrepancy id: ${record.id}`);
 		} else {
-			alert(`Adding issue 😲: ${error.message}`)
-
+			alert(`Adding issue 😲: ${error.message}`);
 		}
 
-
-		form.reset()
-		
+		form.reset();
 	}
 </script>
 
@@ -93,36 +90,19 @@
 				>
 			</div>
 			<div class="mb-3">
-				<label for="channelInput" class="form-label">Channel</label>
-				<select
-					bind:value={channel}
+				<label for="qtyInput" class="form-label">Quantity</label>
+				<input
+					type="number"
 					required
-					class="form-select form-select-sm"
-					name="channelInput"
-					id="channelInput"
-				>
-					<option value={""} selected>Select channel</option>
-					{#each channels as channel}
-						<option value={channel}>{channel}</option>
-					{/each}
-				</select>
+					bind:value={qty}
+					class="form-control"
+					name="qtyInput"
+					id="qtyInput"
+					aria-describedby="helpQty"
+				/>
+				<small id="helpQty" class="form-text text-muted">How many units</small>
 			</div>
-			<div class="mb-3">
-				<label for="entityInput" class="form-label">Entity</label>
 
-				<select
-					bind:value={entity}
-					required
-					class="form-select form-select-sm"
-					name="entityInput"
-					id="entityInput"
-				>
-					<option value={""} selected>Select entity</option>
-					{#each entities as entity}
-						<option value={entity}>{entity}</option>
-					{/each}
-				</select>
-			</div>
 			<div class="mb-3">
 				<label for="type" class="form-label">Discrepancy type</label>
 				<select
@@ -132,14 +112,46 @@
 					name="type"
 					id="type"
 				>
-					<option value={""} selected>Select one</option>
+					<option value={''} selected>Select one</option>
 					{#each discrepancyCategories as category}
 						<option value={category}>{category}</option>
 					{/each}
 				</select>
 			</div>
 			{#if discrepancy_category}
-				{#if !['MISSING_LABELS', 'NO_RMA_SYSTEM'].includes(discrepancy_category)}
+				{#if discrepancy_category !== 'MISSING_LABELS'}
+					<div class="mb-3">
+						<label for="channelInput" class="form-label">Channel</label>
+						<select
+							bind:value={channel}
+							class="form-select form-select-sm"
+							name="channelInput"
+							id="channelInput"
+						>
+							<option value={''} selected>Select channel</option>
+							{#each channels as channel}
+								<option value={channel}>{channel}</option>
+							{/each}
+						</select>
+					</div>
+					<div class="mb-3">
+						<label for="entityInput" class="form-label">Entity</label>
+
+						<select
+							bind:value={entity}
+							class="form-select form-select-sm"
+							name="entityInput"
+							id="entityInput"
+						>
+							<option value={''} selected>Select entity</option>
+							{#each entities as entity}
+								<option value={entity}>{entity}</option>
+							{/each}
+						</select>
+					</div>
+				{/if}
+
+				{#if !['MISSING_LABELS'].includes(discrepancy_category)}
 					<div class="mb-3">
 						<label for="rmaInput" class="form-label">RMA</label>
 						<input
@@ -150,6 +162,8 @@
 							id="rmaInput"
 						/>
 					</div>
+				{/if}
+				{#if !['MISSING_LABELS', 'NO_RMA_SYSTEM'].includes(discrepancy_category)}
 					<div class="mb-3">
 						<label for="rmaCreationDate" class="form-label">RMA creation date</label>
 						<input
@@ -179,21 +193,22 @@
 						>When the material was received in Mexicali</small
 					>
 				</div>
-
-				<div class="mb-3">
-					<label for="trackingInput" class="form-label">Tracking number</label>
-					<input
-						type="text"
-						bind:value={tracking_number}
-						class="form-control"
-						name="trackingInput"
-						id="trackingInput"
-						aria-describedby="trackingHelp"
-					/>
-				</div>
+				{#if discrepancy_category !== 'MISSING_LABELS'}
+					<div class="mb-3">
+						<label for="trackingInput" class="form-label">Tracking number</label>
+						<input
+							type="text"
+							bind:value={tracking_number}
+							class="form-control"
+							name="trackingInput"
+							id="trackingInput"
+							aria-describedby="trackingHelp"
+						/>
+					</div>
+				{/if}
 
 				<div class="row mb-3">
-					{#if ['INCORRECT_SKU', 'EMPTY_PACKAGE', 'DUMMY_FAKE', 'NON_FITBIT'].includes(discrepancy_category)}
+					{#if !['RTC', 'INCORRECT_ENTITY', 'NO_RMA_SYSTEM', 'MISSING_LABELS', 'NO_MATCHING_RMA'].includes(discrepancy_category)}
 						<div class="col-6">
 							<label for="expectedSKUInput" class="form-label">Expected SKU</label>
 							<input
@@ -205,7 +220,7 @@
 							/>
 						</div>
 					{/if}
-					{#if ['RTC', 'INCORRECT_SKU'].includes(discrepancy_category)}
+					{#if ['RTC', 'INCORRECT_SKU', 'UNAUTHORIZED_CLOSEDBOX', 'INCORRECT_ENTITY'].includes(discrepancy_category)}
 						<div class="col-6">
 							<label for="receivedSKUInput" class="form-label">Received SKU</label>
 							<input
@@ -218,7 +233,7 @@
 						</div>
 					{/if}
 				</div>
-				{#if discrepancy_category === 'RTC'}
+				{#if ['RTC', 'UNAUTHORIZED_CLOSEDBOX', 'INCORRECT_ENTITY'].includes(discrepancy_category)}
 					<div class="mb-3">
 						<label for="receivedSNInput" class="form-label">Received serial number</label>
 						<input
@@ -230,18 +245,7 @@
 						/>
 					</div>
 				{/if}
-				<div class="mb-3">
-					<label for="qtyInput" class="form-label">Quantity</label>
-					<input
-						type="number"
-						bind:value={qty}
-						class="form-control"
-						name="qtyInput"
-						id="qtyInput"
-						aria-describedby="helpQty"
-					/>
-					<small id="helpQty" class="form-text text-muted">How many units</small>
-				</div>
+
 				<div class="d-grid gap-2">
 					<button
 						type="submit"
